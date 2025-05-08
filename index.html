@@ -158,6 +158,47 @@
             transform: translateX(-50%) rotate(20deg);
             left: calc(50% + 12px);
         }
+        /* Deep sea body (Water + Deep Sea) */
+        .deep-sea-body .body {
+            width: 6px;
+            background: #1e90ff;
+            border-radius: 10px;
+        }
+        /* Surface body (Water + Surface) */
+        .surface-body .body {
+            width: 5px;
+            background: #4682b4;
+            border-radius: 5px;
+        }
+        /* Tree body (Land + Trees) */
+        .tree-body .arms {
+            width: 70px;
+            height: 5px;
+            background: #8b4513;
+        }
+        /* Ground body (Land + Ground) */
+        .ground-body .body {
+            width: 8px;
+            background: #8b4513;
+            border-radius: 5px;
+        }
+        /* Squid-shaped head (Swift) */
+        .squid-head .head {
+            background: #1e90ff;
+            width: 35px;
+            height: 40px;
+            border-radius: 20% 20% 50% 50%;
+            transform: translateX(-50%) scaleX(1.2);
+        }
+        /* Sea Sponge-shaped head (Sturdy) */
+        .sponge-head .head {
+            background: #f4a460;
+            width: 40px;
+            height: 40px;
+            border-radius: 20%;
+            background-image: radial-gradient(circle, #f4a460 10%, transparent 10%);
+            background-size: 5px 5px;
+        }
         /* Dolphin-shaped head (Swift) */
         .dolphin-head .head {
             background: #4682b4;
@@ -173,6 +214,61 @@
             height: 30px;
             border-bottom: 10px solid white;
             clip-path: polygon(0 0, 100% 0, 100% 70%, 50% 100%, 0 70%);
+        }
+        /* Squirrel-shaped head (Swift) */
+        .squirrel-head .head {
+            background: #a0522d;
+            width: 35px;
+            height: 35px;
+            border-radius: 50% 50% 40% 40%;
+        }
+        .squirrel-head::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 30%;
+            width: 10px;
+            height: 10px;
+            background: #a0522d;
+            border-radius: 50%;
+            transition: all 0.5s ease;
+        }
+        .squirrel-head::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            right: 30%;
+            width: 10px;
+            height: 10px;
+            background: #a0522d;
+            border-radius: 50%;
+            transition: all 0.5s ease;
+        }
+        /* Monkey-shaped head (Sturdy) */
+        .monkey-head .head {
+            background: #8b4513;
+            width: 45px;
+            height: 35px;
+            border-radius: 30% 30% 50% 50%;
+        }
+        /* Turtle-shaped head (Slow and Steady) */
+        .turtle-head .head {
+            background: #2e8b57;
+            width: 35px;
+            height: 35px;
+            border-radius: 30% 30% 50% 50%;
+        }
+        .turtle-head::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 25px;
+            height: 20px;
+            background: #228b22;
+            border-radius: 50% 50% 0 0;
+            transition: all 0.5s ease;
         }
         /* Bear-shaped head (Large and in Charge) */
         .bear-head .head {
@@ -203,24 +299,44 @@
             border-radius: 50%;
             transition: all 0.5s ease;
         }
-        /* Turtle-shaped head (Slow and Steady) */
-        .turtle-head .head {
-            background: #2e8b57;
-            width: 35px;
-            height: 35px;
-            border-radius: 30% 30% 50% 50%;
+        /* Squid tentacles (Swift) */
+        .squid-tentacles .arms {
+            width: 80px;
+            height: 8px;
+            background: #1e90ff;
+            border-radius: 20px;
+            transform: translateX(-50%) rotate(15deg);
         }
-        .turtle-head::after {
+        .squid-tentacles::before {
             content: '';
             position: absolute;
-            top: -10px;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-15deg);
+            width: 80px;
+            height: 8px;
+            background: #1e90ff;
+            border-radius: 20px;
+            transition: all 0.5s ease;
+        }
+        .squid-tentacles::after {
+            content: '';
+            position: absolute;
+            top: 70px;
             left: 50%;
             transform: translateX(-50%);
-            width: 25px;
-            height: 20px;
-            background: #228b22;
-            border-radius: 50% 50% 0 0;
+            width: 60px;
+            height: 8px;
+            background: #1e90ff;
+            border-radius: 20px;
             transition: all 0.5s ease;
+        }
+        /* Sea Sponge texture (Sturdy) */
+        .sponge-texture .body {
+            width: 10px;
+            background: #f4a460;
+            background-image: radial-gradient(circle, #f4a460 10%, transparent 10%);
+            background-size: 5px 5px;
         }
         /* Dolphin fins (Swift) */
         .dolphin-fins .body {
@@ -259,6 +375,44 @@
             clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
             transition: all 0.5s ease;
         }
+        /* Squirrel tail (Swift) */
+        .squirrel-tail::after {
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 40px;
+            background: #a0522d;
+            border-radius: 50% 50% 0 0;
+            transition: all 0.5s ease;
+        }
+        /* Monkey arms (Sturdy) */
+        .monkey-arms .arms {
+            width: 80px;
+            height: 6px;
+            background: #8b4513;
+            transform: translateX(-50%) rotate(10deg);
+        }
+        .monkey-arms::before {
+            content: '';
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-10deg);
+            width: 80px;
+            height: 6px;
+            background: #8b4513;
+            transition: all 0.5s ease;
+        }
+        /* Turtle shell (Slow and Steady) */
+        .turtle-shell .body {
+            width: 12px;
+            background: #228b22;
+            border: 2px solid #006400;
+            border-radius: 10px;
+        }
         /* Bear claws (Large and in Charge) */
         .bear-claws .body {
             width: 10px;
@@ -279,13 +433,6 @@
             background: #555;
             clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
             transition: all 0.5s ease;
-        }
-        /* Turtle shell (Slow and Steady) */
-        .turtle-shell .body {
-            width: 12px;
-            background: #228b22;
-            border: 2px solid #006400;
-            border-radius: 10px;
         }
         /* Wings (Fly) */
         .wings .arms {
@@ -334,7 +481,18 @@
             border-bottom: 40px solid #4682b4;
             transition: all 0.5s ease;
         }
-        /* Laser eyes (Lasers) */
+        /* Muscular arms (Physically Strong) */
+        .muscular-arms .arms {
+            width: 70px;
+            height: 8px;
+            background: #555;
+            border-radius: 5px;
+        }
+        /* Mental aura (Mentally Strong) */
+        .mental-aura .head {
+            box-shadow: 0 0 10px #ffd700;
+        }
+        /* Laser eyes (Military Powers) */
         .laser-eyes .head::before {
             content: '';
             position: absolute;
@@ -359,7 +517,32 @@
             box-shadow: 0 0 10px #ff0000;
             transition: all 0.5s ease;
         }
-        /* Briefcase and glasses (Taxes) */
+        /* Nunchucks (Karate Powers) */
+        .nunchucks .arms::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 10%;
+            width: 10px;
+            height: 20px;
+            background: #333;
+            border-radius: 2px;
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+        }
+        .nunchucks .arms::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            right: 10%;
+            width: 10px;
+            height: 20px;
+            background: #333;
+            border-radius: 2px;
+            transform: rotate(-45deg);
+            transition: all 0.5s ease;
+        }
+        /* Briefcase and glasses (Tax Accountant) */
         .tax-accountant .arms::after {
             content: '';
             position: absolute;
@@ -383,6 +566,16 @@
             border-radius: 20px;
             background: transparent;
             transition: all 0.5s ease;
+        }
+        /* Jazz hands (Body) */
+        .jazz-hands .arms {
+            border: 2px solid #ffd700;
+            box-shadow: 0 0 10px #ffd700;
+            animation: shimmer 1s infinite alternate;
+        }
+        @keyframes shimmer {
+            0% { box-shadow: 0 0 10px #ffd700; }
+            100% { box-shadow: 0 0 20px #ffd700; }
         }
         #question-text {
             font-size: 18px;
@@ -464,13 +657,43 @@
             },
             {
                 Water: {
+                    text: "Would you rather live in the deep sea or near the surface?",
+                    answers: [
+                        { text: "Deep sea", trait: "deep-sea-body", habitat: "Deep Sea" },
+                        { text: "Near the surface", trait: "surface-body", habitat: "Surface" }
+                    ]
+                },
+                Land: {
+                    text: "Would you rather live in trees or on the ground?",
+                    answers: [
+                        { text: "In trees", trait: "tree-body", habitat: "Trees" },
+                        { text: "On the ground", trait: "ground-body", habitat: "Ground" }
+                    ]
+                }
+            },
+            {
+                "Water-Deep Sea": {
+                    text: "Would you rather be swift or sturdy?",
+                    answers: [
+                        { text: "Be swift", trait: "squid-tentacles", head: "squid-head", behavior: "Swift" },
+                        { text: "Be sturdy", trait: "sponge-texture", head: "sponge-head", behavior: "Sturdy" }
+                    ]
+                },
+                "Water-Surface": {
                     text: "Would you rather be swift or sturdy?",
                     answers: [
                         { text: "Be swift", trait: "dolphin-fins", head: "dolphin-head", behavior: "Swift" },
                         { text: "Be sturdy", trait: "shark-teeth", head: "shark-head", behavior: "Sturdy" }
                     ]
                 },
-                Land: {
+                "Land-Trees": {
+                    text: "Would you rather be swift or sturdy?",
+                    answers: [
+                        { text: "Be swift", trait: "squirrel-tail", head: "squirrel-head", behavior: "Swift" },
+                        { text: "Be sturdy", trait: "monkey-arms", head: "monkey-head", behavior: "Sturdy" }
+                    ]
+                },
+                "Land-Ground": {
                     text: "Would you rather be slow and steady or large and in charge?",
                     answers: [
                         { text: "Be slow and steady", trait: "turtle-shell", head: "turtle-head", behavior: "Slow and Steady" },
@@ -486,68 +709,228 @@
                 ]
             },
             {
-                text: "Would you rather shoot lasers or do taxes?",
+                text: "Are you more physically or mentally strong?",
                 answers: [
-                    { text: "Shoot lasers", trait: "laser-eyes", profession: "Lasers" },
-                    { text: "Do taxes", trait: "tax-accountant", profession: "Taxes" }
+                    { text: "Physically strong", trait: "muscular-arms", strength: "Physically Strong" },
+                    { text: "Mentally strong", trait: "mental-aura", strength: "Mentally Strong" }
                 ]
+            },
+            {
+                "Physically Strong": {
+                    text: "Do you have karate or military powers?",
+                    answers: [
+                        { text: "Karate powers", trait: "nunchucks", profession: "Nunchucks" },
+                        { text: "Military powers", trait: "laser-eyes", profession: "Lasers" }
+                    ]
+                },
+                "Mentally Strong": {
+                    text: "Do you use your brain or your body more?",
+                    answers: [
+                        { text: "Brain", trait: "tax-accountant", profession: "Tax Accountant" },
+                        { text: "Body", trait: "jazz-hands", profession: "Jazz Hands" }
+                    ]
+                }
             }
         ];
 
         const animalData = {
+            "Flying Squid with Laser Eyes": {
+                description: "You're a Flying Squid with Laser Eyes! You jet through the skies, zapping clouds with your glowing gaze!"
+            },
+            "Flying Squid with Nunchucks": {
+                description: "You're a Flying Squid with Nunchucks! You soar through the air, twirling nunchucks with your tentacles!"
+            },
+            "Flying Squid Who Does Taxes": {
+                description: "You're a Flying Squid Who Does Taxes! You glide through the skies, inking tax forms with a briefcase!"
+            },
+            "Flying Squid with Jazz Hands": {
+                description: "You're a Flying Squid with Jazz Hands! You dazzle the skies, waving sparkly tentacles in a jazzy flourish!"
+            },
+            "Swimming Squid with Laser Eyes": {
+                description: "You're a Swimming Squid with Laser Eyes! You glide through the deep sea, lasering coral with precision!"
+            },
+            "Swimming Squid with Nunchucks": {
+                description: "You're a Swimming Squid with Nunchucks! You swim through the deep, spinning nunchucks with your many arms!"
+            },
+            "Swimming Squid Who Does Taxes": {
+                description: "You're a Swimming Squid Who Does Taxes! You swim to clients, balancing ledgers with your tentacles!"
+            },
+            "Swimming Squid with Jazz Hands": {
+                description: "You're a Swimming Squid with Jazz Hands! You dazzle fish in the deep sea with sparkly tentacles!"
+            },
+            "Flying Sea Sponge with Laser Eyes": {
+                description: "You're a Flying Sea Sponge with Laser Eyes! You float through the skies, lasering obstacles with a porous glare!"
+            },
+            "Flying Sea Sponge with Nunchucks": {
+                description: "You're a Flying Sea Sponge with Nunchucks! You drift through the air, spinning nunchucks with a spongy grip!"
+            },
+            "Flying Sea Sponge Who Does Taxes": {
+                description: "You're a Flying Sea Sponge Who Does Taxes! You soar with a briefcase, auditing with a porous touch!"
+            },
+            "Flying Sea Sponge with Jazz Hands": {
+                description: "You're a Flying Sea Sponge with Jazz Hands! You sparkle in the skies, waving porous arms in a jazzy dance!"
+            },
+            "Swimming Sea Sponge with Laser Eyes": {
+                description: "You're a Swimming Sea Sponge with Laser Eyes! You bob in the deep sea, lasering fish for fun!"
+            },
+            "Swimming Sea Sponge with Nunchucks": {
+                description: "You're a Swimming Sea Sponge with Nunchucks! You sway in the deep, twirling nunchucks with a spongy flair!"
+            },
+            "Swimming Sea Sponge Who Does Taxes": {
+                description: "You're a Swimming Sea Sponge Who Does Taxes! You filter water and taxes, balancing books with ease!"
+            },
+            "Swimming Sea Sponge with Jazz Hands": {
+                description: "You're a Swimming Sea Sponge with Jazz Hands! You dazzle the deep sea with sparkly, porous waves!"
+            },
             "Flying Dolphin with Laser Eyes": {
                 description: "You're a Flying Dolphin with Laser Eyes! You soar through the skies, zapping clouds with your glowing gaze!"
             },
+            "Flying Dolphin with Nunchucks": {
+                description: "You're a Flying Dolphin with Nunchucks! You glide through the air, twirling nunchucks with your fins!"
+            },
             "Flying Dolphin Who Does Taxes": {
-                description: "You're a Flying Dolphin Who Does Taxes! You glide over oceans, filing taxes with a briefcase in your fins!"
+                description: "You're a Flying Dolphin Who Does Taxes! You soar over oceans, filing taxes with a briefcase in your fins!"
+            },
+            "Flying Dolphin with Jazz Hands": {
+                description: "You're a Flying Dolphin with Jazz Hands! You dazzle the skies, waving sparkly fins in a jazzy flourish!"
             },
             "Swimming Dolphin with Laser Eyes": {
                 description: "You're a Swimming Dolphin with Laser Eyes! You dart through the seas, lasering coral for fun!"
             },
+            "Swimming Dolphin with Nunchucks": {
+                description: "You're a Swimming Dolphin with Nunchucks! You swim through the seas, spinning nunchucks with your sleek fins!"
+            },
             "Swimming Dolphin Who Does Taxes": {
-                description: "You're a Swimming Dolphin Who Does Taxes! You swim to clients, balancing ledgers with your sleek fins!"
+                description: "You're a Swimming Dolphin Who Does Taxes! You swim to clients, balancing ledgers with your fins!"
+            },
+            "Swimming Dolphin with Jazz Hands": {
+                description: "You're a Swimming Dolphin with Jazz Hands! You dazzle fish with sparkly fins in a jazzy dance!"
             },
             "Flying Shark with Laser Eyes": {
                 description: "You're a Flying Shark with Laser Eyes! You dominate the skies, blasting foes with your terrifying laser eyes!"
             },
+            "Flying Shark with Nunchucks": {
+                description: "You're a Flying Shark with Nunchucks! You soar through the air, twirling nunchucks with your toothy grin!"
+            },
             "Flying Shark Who Does Taxes": {
-                description: "You're a Flying Shark Who Does Taxes! You glide through the air, crunching numbers and jaws with equal precision!"
+                description: "You're a Flying Shark Who Does Taxes! You glide through the skies, crunching numbers with a briefcase!"
+            },
+            "Flying Shark with Jazz Hands": {
+                description: "You're a Flying Shark with Jazz Hands! You dazzle the skies, waving sparkly fins in a jazzy flourish!"
             },
             "Swimming Shark with Laser Eyes": {
                 description: "You're a Swimming Shark with Laser Eyes! You prowl the oceans, lasering fish for lunch!"
             },
+            "Swimming Shark with Nunchucks": {
+                description: "You're a Swimming Shark with Nunchucks! You swim through the seas, spinning nunchucks with your jaws!"
+            },
             "Swimming Shark Who Does Taxes": {
                 description: "You're a Swimming Shark Who Does Taxes! You swim with a briefcase, auditing underwater tax evaders!"
+            },
+            "Swimming Shark with Jazz Hands": {
+                description: "You're a Swimming Shark with Jazz Hands! You dazzle the seas with sparkly fins and a toothy grin!"
+            },
+            "Flying Squirrel with Laser Eyes": {
+                description: "You're a Flying Squirrel with Laser Eyes! You glide through the trees, zapping nuts with your glowing gaze!"
+            },
+            "Flying Squirrel with Nunchucks": {
+                description: "You're a Flying Squirrel with Nunchucks! You leap through the trees, twirling nunchucks with your tiny paws!"
+            },
+            "Flying Squirrel Who Does Taxes": {
+                description: "You're a Flying Squirrel Who Does Taxes! You glide from branch to branch, filing taxes with a tiny briefcase!"
+            },
+            "Flying Squirrel with Jazz Hands": {
+                description: "You're a Flying Squirrel with Jazz Hands! You dazzle the trees with sparkly paws in a jazzy flourish!"
+            },
+            "Land Squirrel with Laser Eyes": {
+                description: "You're a Land Squirrel with Laser Eyes! You scamper on the ground, lasering acorns for snacks!"
+            },
+            "Land Squirrel with Nunchucks": {
+                description: "You're a Land Squirrel with Nunchucks! You scurry on the ground, spinning nunchucks with your bushy tail!"
+            },
+            "Land Squirrel Who Does Taxes": {
+                description: "You're a Land Squirrel Who Does Taxes! You scurry to clients, balancing books with your tiny paws!"
+            },
+            "Land Squirrel with Jazz Hands": {
+                description: "You're a Land Squirrel with Jazz Hands! You dazzle the forest floor with sparkly paws in a jazzy dance!"
+            },
+            "Flying Monkey with Laser Eyes": {
+                description: "You're a Flying Monkey with Laser Eyes! You swing through the skies, lasering branches with your fierce gaze!"
+            },
+            "Flying Monkey with Nunchucks": {
+                description: "You're a Flying Monkey with Nunchucks! You soar through the trees, twirling nunchucks with your nimble arms!"
+            },
+            "Flying Monkey Who Does Taxes": {
+                description: "You're a Flying Monkey Who Does Taxes! You glide through the trees, auditing with a briefcase in your paws!"
+            },
+            "Flying Monkey with Jazz Hands": {
+                description: "You're a Flying Monkey with Jazz Hands! You dazzle the skies, waving sparkly arms in a jazzy flourish!"
+            },
+            "Land Monkey with Laser Eyes": {
+                description: "You're a Land Monkey with Laser Eyes! You climb on the ground, lasering bananas for fun!"
+            },
+            "Land Monkey with Nunchucks": {
+                description: "You're a Land Monkey with Nunchucks! You swing on the ground, spinning nunchucks with your nimble fingers!"
+            },
+            "Land Monkey Who Does Taxes": {
+                description: "You're a Land Monkey Who Does Taxes! You swing to clients, filing taxes with your nimble fingers!"
+            },
+            "Land Monkey with Jazz Hands": {
+                description: "You're a Land Monkey with Jazz Hands! You dazzle the forest with sparkly arms in a jazzy dance!"
             },
             "Flying Turtle with Laser Eyes": {
                 description: "You're a Flying Turtle with Laser Eyes! You glide slowly, lasering obstacles from your armored shell!"
             },
+            "Flying Turtle with Nunchucks": {
+                description: "You're a Flying Turtle with Nunchucks! You float through the skies, twirling nunchucks with your flippers!"
+            },
             "Flying Turtle Who Does Taxes": {
-                description: "You're a Flying Turtle Who Does Taxes! You float with a briefcase, meticulously auditing from the skies!"
+                description: "You're a Flying Turtle Who Does Taxes! You soar with a briefcase, auditing from your trusty shell!"
+            },
+            "Flying Turtle with Jazz Hands": {
+                description: "You're a Flying Turtle with Jazz Hands! You dazzle the skies, waving sparkly flippers in a jazzy flourish!"
             },
             "Land Turtle with Laser Eyes": {
                 description: "You're a Land Turtle with Laser Eyes! You creep along, lasering rocks to clear your slow path!"
             },
+            "Land Turtle with Nunchucks": {
+                description: "You're a Land Turtle with Nunchucks! You plod along, spinning nunchucks with your sturdy flippers!"
+            },
             "Land Turtle Who Does Taxes": {
-                description: "You're a Land Turtle Who Does Taxes! You plod to work, balancing books from within your trusty shell!"
+                description: "You're a Land Turtle Who Does Taxes! You plod to work, balancing books from within your shell!"
+            },
+            "Land Turtle with Jazz Hands": {
+                description: "You're a Land Turtle with Jazz Hands! You dazzle the ground with sparkly flippers in a jazzy dance!"
             },
             "Flying Bear with Laser Eyes": {
                 description: "You're a Flying Bear with Laser Eyes! You soar over forests, zapping trees with your glowing red gaze!"
             },
+            "Flying Bear with Nunchucks": {
+                description: "You're a Flying Bear with Nunchucks! You glide through the skies, twirling nunchucks with your mighty paws!"
+            },
             "Flying Bear Who Does Taxes": {
                 description: "You're a Flying Bear Who Does Taxes! You fly to clients with a briefcase, growling at late tax filings!"
+            },
+            "Flying Bear with Jazz Hands": {
+                description: "You're a Flying Bear with Jazz Hands! You dazzle the skies, waving sparkly paws in a jazzy flourish!"
             },
             "Land Bear with Laser Eyes": {
                 description: "You're a Land Bear with Laser Eyes! You roam the land, lasering berries for a quick snack!"
             },
+            "Land Bear with Nunchucks": {
+                description: "You're a Land Bear with Nunchucks! You lumber on the ground, spinning nunchucks with your mighty paws!"
+            },
             "Land Bear Who Does Taxes": {
                 description: "You're a Land Bear Who Does Taxes! You lumber through offices, filing taxes with a mighty paw!"
+            },
+            "Land Bear with Jazz Hands": {
+                description: "You're a Land Bear with Jazz Hands! You dazzle the forest with sparkly paws in a jazzy dance!"
             }
         };
 
         let currentQuestion = 0;
         let traits = [];
-        let choices = { environment: '', behavior: '', ability: '', profession: '' };
+        let choices = { environment: '', habitat: '', behavior: '', ability: '', strength: '', profession: '' };
 
         const questionText = document.getElementById('question-text');
         const answerButtonA = document.getElementById('answer-a');
@@ -561,7 +944,7 @@
         function startGame() {
             currentQuestion = 0;
             traits = [];
-            choices = { environment: '', behavior: '', ability: '', profession: '' };
+            choices = { environment: '', habitat: '', behavior: '', ability: '', strength: '', profession: '' };
             resultDiv.style.display = 'none';
             stickFigure.className = 'stick-figure';
             answerButtonA.style.display = 'inline-block';
@@ -574,6 +957,10 @@
                 let q;
                 if (currentQuestion === 1) {
                     q = questions[currentQuestion][choices.environment];
+                } else if (currentQuestion === 2) {
+                    q = questions[currentQuestion][`${choices.environment}-${choices.habitat}`];
+                } else if (currentQuestion === 5) {
+                    q = questions[currentQuestion][choices.strength];
                 } else {
                     q = questions[currentQuestion];
                 }
@@ -593,16 +980,20 @@
             if (currentQuestion === 0) {
                 choices.environment = answer.environment;
             } else if (currentQuestion === 1) {
+                choices.habitat = answer.habitat;
+            } else if (currentQuestion === 2) {
                 choices.behavior = answer.behavior;
                 stickFigure.classList.add(answer.head);
                 traits.push(answer.head);
-            } else if (currentQuestion === 2) {
+            } else if (currentQuestion === 3) {
                 choices.ability = answer.ability;
                 if (choices.environment === "Water" && choices.ability === "Grounded") {
                     stickFigure.classList.add('large-tail');
                     traits.push('large-tail');
                 }
-            } else if (currentQuestion === 3) {
+            } else if (currentQuestion === 4) {
+                choices.strength = answer.strength;
+            } else if (currentQuestion === 5) {
                 choices.profession = answer.profession;
             }
             currentQuestion++;
@@ -612,12 +1003,22 @@
         function showResult() {
             let baseAnimal = '';
             if (choices.environment === "Water") {
-                baseAnimal = choices.behavior === "Swift" ? "Dolphin" : "Shark";
+                if (choices.habitat === "Deep Sea") {
+                    baseAnimal = choices.behavior === "Swift" ? "Squid" : "Sea Sponge";
+                } else {
+                    baseAnimal = choices.behavior === "Swift" ? "Dolphin" : "Shark";
+                }
             } else {
-                baseAnimal = choices.behavior === "Slow and Steady" ? "Turtle" : "Bear";
+                if (choices.habitat === "Trees") {
+                    baseAnimal = choices.behavior === "Swift" ? "Squirrel" : "Monkey";
+                } else {
+                    baseAnimal = choices.behavior === "Slow and Steady" ? "Turtle" : "Bear";
+                }
             }
             const abilityPrefix = choices.ability === "Flying" ? "Flying" : (choices.environment === "Water" ? "Swimming" : "Land");
-            const professionSuffix = choices.profession === "Lasers" ? "with Laser Eyes" : "Who Does Taxes";
+            const professionSuffix = choices.profession === "Lasers" ? "with Laser Eyes" :
+                                    choices.profession === "Nunchucks" ? "with Nunchucks" :
+                                    choices.profession === "Tax Accountant" ? "Who Does Taxes" : "with Jazz Hands";
             const finalAnimal = `${abilityPrefix} ${baseAnimal} ${professionSuffix}`;
 
             questionText.textContent = '';

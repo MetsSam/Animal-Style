@@ -1,0 +1,635 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animal Morph Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        #game-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+        #character-display {
+            width: 200px;
+            height: 250px;
+            margin: 0 auto 20px;
+            position: relative;
+            transition: all 0.5s ease;
+        }
+        .stick-figure {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 200px;
+        }
+        .stick-figure .head {
+            width: 30px;
+            height: 30px;
+            background: black;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: all 0.5s ease;
+        }
+        .stick-figure .body {
+            width: 4px;
+            height: 60px;
+            background: black;
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: all 0.5s ease;
+        }
+        .stick-figure .arms {
+            width: 60px;
+            height: 4px;
+            background: black;
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: all 0.5s ease;
+        }
+        .stick-figure .legs {
+            width: 4px;
+            height: 60px;
+            background: black;
+            position: absolute;
+            top: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: all 0.5s ease;
+        }
+        .stick-figure .leg-left {
+            transform: translateX(-50%) rotate(-30deg);
+            transform-origin: top;
+        }
+        .stick-figure .leg-right {
+            transform: translateX(-50%) rotate(30deg);
+            transform-origin: top;
+            left: calc(50% + 10px);
+        }
+        /* Sea-like bottom (Water) */
+        .sea-bottom .legs, .sea-bottom .leg-left, .sea-bottom .leg-right {
+            display: none;
+        }
+        .sea-bottom::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 30px solid #1e90ff;
+            transition: all 0.5s ease;
+        }
+        /* Land-like bottom (Land) */
+        .land-bottom .legs {
+            width: 6px;
+            height: 70px;
+            background: #8b4513;
+        }
+        .land-bottom .leg-left {
+            transform: translateX(-50%) rotate(-20deg);
+        }
+        .land-bottom .leg-right {
+            transform: translateX(-50%) rotate(20deg);
+            left: calc(50% + 12px);
+        }
+        /* Dolphin-shaped head (Swift) */
+        .dolphin-head .head {
+            background: #4682b4;
+            width: 40px;
+            height: 30px;
+            border-radius: 50% 50% 20% 20%;
+            transform: translateX(-50%) scaleX(1.3);
+        }
+        /* Shark-shaped head (Sturdy) */
+        .shark-head .head {
+            background: #4682b4;
+            width: 40px;
+            height: 30px;
+            border-bottom: 10px solid white;
+            clip-path: polygon(0 0, 100% 0, 100% 70%, 50% 100%, 0 70%);
+        }
+        /* Bear-shaped head (Large and in Charge) */
+        .bear-head .head {
+            background: #8b4513;
+            width: 40px;
+            height: 40px;
+            border-radius: 40% 40% 50% 50%;
+        }
+        .bear-head::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 25%;
+            width: 15px;
+            height: 15px;
+            background: #8b4513;
+            border-radius: 50%;
+            transition: all 0.5s ease;
+        }
+        .bear-head::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            right: 25%;
+            width: 15px;
+            height: 15px;
+            background: #8b4513;
+            border-radius: 50%;
+            transition: all 0.5s ease;
+        }
+        /* Turtle-shaped head (Slow and Steady) */
+        .turtle-head .head {
+            background: #2e8b57;
+            width: 35px;
+            height: 35px;
+            border-radius: 30% 30% 50% 50%;
+        }
+        .turtle-head::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 25px;
+            height: 20px;
+            background: #228b22;
+            border-radius: 50% 50% 0 0;
+            transition: all 0.5s ease;
+        }
+        /* Dolphin fins (Swift) */
+        .dolphin-fins .body {
+            width: 6px;
+            background: #4682b4;
+        }
+        .dolphin-fins .arms {
+            width: 50px;
+            height: 10px;
+            background: #4682b4;
+            border-radius: 20px;
+            transform: translateX(-50%) rotate(20deg);
+        }
+        .dolphin-fins::before {
+            content: '';
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-20deg);
+            width: 50px;
+            height: 10px;
+            background: #4682b4;
+            border-radius: 20px;
+            transition: all 0.5s ease;
+        }
+        /* Shark teeth (Sturdy) */
+        .shark-teeth::after {
+            content: '';
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: #4682b4;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            transition: all 0.5s ease;
+        }
+        /* Bear claws (Large and in Charge) */
+        .bear-claws .body {
+            width: 10px;
+            background: #8b4513;
+        }
+        .bear-claws .arms {
+            width: 70px;
+            height: 6px;
+            background: #8b4513;
+        }
+        .bear-claws::after {
+            content: '';
+            position: absolute;
+            top: 50px;
+            left: 25%;
+            width: 10px;
+            height: 10px;
+            background: #555;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            transition: all 0.5s ease;
+        }
+        /* Turtle shell (Slow and Steady) */
+        .turtle-shell .body {
+            width: 12px;
+            background: #228b22;
+            border: 2px solid #006400;
+            border-radius: 10px;
+        }
+        /* Wings (Fly) */
+        .wings .arms {
+            width: 80px;
+            height: 20px;
+            background: #696969;
+            border-radius: 10px;
+            transform: translateX(-50%) rotate(-10deg);
+        }
+        .wings::before {
+            content: '';
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%) rotate(10deg);
+            width: 80px;
+            height: 20px;
+            background: #696969;
+            border-radius: 10px;
+            transition: all 0.5s ease;
+        }
+        /* Strong legs (Grounded for Land) */
+        .strong-legs .legs {
+            width: 6px;
+            height: 70px;
+            background: #555;
+        }
+        .strong-legs .leg-left {
+            transform: translateX(-50%) rotate(-20deg);
+        }
+        .strong-legs .leg-right {
+            transform: translateX(-50%) rotate(20deg);
+            left: calc(50% + 12px);
+        }
+        /* Large tail (Grounded for Water) */
+        .large-tail::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-bottom: 40px solid #4682b4;
+            transition: all 0.5s ease;
+        }
+        /* Laser eyes (Lasers) */
+        .laser-eyes .head::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 20%;
+            width: 8px;
+            height: 8px;
+            background: #ff0000;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #ff0000;
+            transition: all 0.5s ease;
+        }
+        .laser-eyes .head::after {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 20%;
+            width: 8px;
+            height: 8px;
+            background: #ff0000;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #ff0000;
+            transition: all 0.5s ease;
+        }
+        /* Briefcase and glasses (Taxes) */
+        .tax-accountant .arms::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -20px;
+            width: 20px;
+            height: 15px;
+            background: #333;
+            border: 2px solid #000;
+            transition: all 0.5s ease;
+        }
+        .tax-accountant .head::before {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 10px;
+            border: 2px solid #000;
+            border-radius: 20px;
+            background: transparent;
+            transition: all 0.5s ease;
+        }
+        #question-text {
+            font-size: 18px;
+            margin: 20px 0;
+            min-height: 60px;
+        }
+        #answer-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .answer-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .answer-button:hover {
+            background: #45a049;
+        }
+        #result {
+            display: none;
+            margin-top: 20px;
+        }
+        #result-text {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        #restart-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        #restart-button:hover {
+            background: #1e88e5;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1>Animal Morph Game</h1>
+        <div id="character-display">
+            <div class="stick-figure">
+                <div class="head"></div>
+                <div class="body"></div>
+                <div class="arms"></div>
+                <div class="legs leg-left"></div>
+                <div class="legs leg-right"></div>
+            </div>
+        </div>
+        <div id="question-text"></div>
+        <div id="answer-buttons">
+            <button class="answer-button" id="answer-a"></button>
+            <button class="answer-button" id="answer-b"></button>
+        </div>
+        <div id="result">
+            <div id="result-text"></div>
+            <button id="restart-button">Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                text: "Would you rather live in water or on land?",
+                answers: [
+                    { text: "Live in water", trait: "sea-bottom", environment: "Water" },
+                    { text: "Live on land", trait: "land-bottom", environment: "Land" }
+                ]
+            },
+            {
+                Water: {
+                    text: "Would you rather be swift or sturdy?",
+                    answers: [
+                        { text: "Be swift", trait: "dolphin-fins", head: "dolphin-head", behavior: "Swift" },
+                        { text: "Be sturdy", trait: "shark-teeth", head: "shark-head", behavior: "Sturdy" }
+                    ]
+                },
+                Land: {
+                    text: "Would you rather be slow and steady or large and in charge?",
+                    answers: [
+                        { text: "Be slow and steady", trait: "turtle-shell", head: "turtle-head", behavior: "Slow and Steady" },
+                        { text: "Be large and in charge", trait: "bear-claws", head: "bear-head", behavior: "Large and in Charge" }
+                    ]
+                }
+            },
+            {
+                text: "Would you rather fly or stay grounded?",
+                answers: [
+                    { text: "Fly", trait: "wings", ability: "Flying" },
+                    { text: "Stay grounded", trait: "strong-legs", ability: "Grounded" }
+                ]
+            },
+            {
+                text: "Would you rather shoot lasers or do taxes?",
+                answers: [
+                    { text: "Shoot lasers", trait: "laser-eyes", profession: "Lasers" },
+                    { text: "Do taxes", trait: "tax-accountant", profession: "Taxes" }
+                ]
+            }
+        ];
+
+        const animalData = {
+            "Flying Dolphin with Laser Eyes": {
+                description: "You're a Flying Dolphin with Laser Eyes! You soar through the skies, zapping clouds with your glowing gaze!"
+            },
+            "Flying Dolphin Who Does Taxes": {
+                description: "You're a Flying Dolphin Who Does Taxes! You glide over oceans, filing taxes with a briefcase in your fins!"
+            },
+            "Swimming Dolphin with Laser Eyes": {
+                description: "You're a Swimming Dolphin with Laser Eyes! You dart through the seas, lasering coral for fun!"
+            },
+            "Swimming Dolphin Who Does Taxes": {
+                description: "You're a Swimming Dolphin Who Does Taxes! You swim to clients, balancing ledgers with your sleek fins!"
+            },
+            "Flying Shark with Laser Eyes": {
+                description: "You're a Flying Shark with Laser Eyes! You dominate the skies, blasting foes with your terrifying laser eyes!"
+            },
+            "Flying Shark Who Does Taxes": {
+                description: "You're a Flying Shark Who Does Taxes! You glide through the air, crunching numbers and jaws with equal precision!"
+            },
+            "Swimming Shark with Laser Eyes": {
+                description: "You're a Swimming Shark with Laser Eyes! You prowl the oceans, lasering fish for lunch!"
+            },
+            "Swimming Shark Who Does Taxes": {
+                description: "You're a Swimming Shark Who Does Taxes! You swim with a briefcase, auditing underwater tax evaders!"
+            },
+            "Flying Turtle with Laser Eyes": {
+                description: "You're a Flying Turtle with Laser Eyes! You glide slowly, lasering obstacles from your armored shell!"
+            },
+            "Flying Turtle Who Does Taxes": {
+                description: "You're a Flying Turtle Who Does Taxes! You float with a briefcase, meticulously auditing from the skies!"
+            },
+            "Land Turtle with Laser Eyes": {
+                description: "You're a Land Turtle with Laser Eyes! You creep along, lasering rocks to clear your slow path!"
+            },
+            "Land Turtle Who Does Taxes": {
+                description: "You're a Land Turtle Who Does Taxes! You plod to work, balancing books from within your trusty shell!"
+            },
+            "Flying Bear with Laser Eyes": {
+                description: "You're a Flying Bear with Laser Eyes! You soar over forests, zapping trees with your glowing red gaze!"
+            },
+            "Flying Bear Who Does Taxes": {
+                description: "You're a Flying Bear Who Does Taxes! You fly to clients with a briefcase, growling at late tax filings!"
+            },
+            "Land Bear with Laser Eyes": {
+                description: "You're a Land Bear with Laser Eyes! You roam the land, lasering berries for a quick snack!"
+            },
+            "Land Bear Who Does Taxes": {
+                description: "You're a Land Bear Who Does Taxes! You lumber through offices, filing taxes with a mighty paw!"
+            }
+        };
+
+        let currentQuestion = 0;
+        let traits = [];
+        let choices = { environment: '', behavior: '', ability: '', profession: '' };
+
+        const questionText = document.getElementById('question-text');
+        const answerButtonA = document.getElementById('answer-a');
+        const answerButtonB = document.getElementById('answer-b');
+        const characterDisplay = document.getElementById('character-display');
+        const stickFigure = document.querySelector('.stick-figure');
+        const resultDiv = document.getElementById('result');
+        const resultText = document.getElementById('result-text');
+        const restartButton = document.getElementById('restart-button');
+
+        function startGame() {
+            currentQuestion = 0;
+            traits = [];
+            choices = { environment: '', behavior: '', ability: '', profession: '' };
+            resultDiv.style.display = 'none';
+            stickFigure.className = 'stick-figure';
+            answerButtonA.style.display = 'inline-block';
+            answerButtonB.style.display = 'inline-block';
+            displayQuestion();
+        }
+
+        function displayQuestion() {
+            if (currentQuestion < questions.length) {
+                let q;
+                if (currentQuestion === 1) {
+                    q = questions[currentQuestion][choices.environment];
+                } else {
+                    q = questions[currentQuestion];
+                }
+                questionText.textContent = q.text;
+                answerButtonA.textContent = q.answers[0].text;
+                answerButtonB.textContent = q.answers[1].text;
+                answerButtonA.onclick = () => selectAnswer(q.answers[0].trait, q.answers[0]);
+                answerButtonB.onclick = () => selectAnswer(q.answers[1].trait, q.answers[1]);
+            } else {
+                showResult();
+            }
+        }
+
+        function selectAnswer(trait, answer) {
+            traits.push(trait);
+            stickFigure.classList.add(trait);
+            if (currentQuestion === 0) {
+                choices.environment = answer.environment;
+            } else if (currentQuestion === 1) {
+                choices.behavior = answer.behavior;
+                stickFigure.classList.add(answer.head);
+                traits.push(answer.head);
+            } else if (currentQuestion === 2) {
+                choices.ability = answer.ability;
+                if (choices.environment === "Water" && choices.ability === "Grounded") {
+                    stickFigure.classList.add('large-tail');
+                    traits.push('large-tail');
+                }
+            } else if (currentQuestion === 3) {
+                choices.profession = answer.profession;
+            }
+            currentQuestion++;
+            displayQuestion();
+        }
+
+        function showResult() {
+            let baseAnimal = '';
+            if (choices.environment === "Water") {
+                baseAnimal = choices.behavior === "Swift" ? "Dolphin" : "Shark";
+            } else {
+                baseAnimal = choices.behavior === "Slow and Steady" ? "Turtle" : "Bear";
+            }
+            const abilityPrefix = choices.ability === "Flying" ? "Flying" : (choices.environment === "Water" ? "Swimming" : "Land");
+            const professionSuffix = choices.profession === "Lasers" ? "with Laser Eyes" : "Who Does Taxes";
+            const finalAnimal = `${abilityPrefix} ${baseAnimal} ${professionSuffix}`;
+
+            questionText.textContent = '';
+            answerButtonA.style.display = 'none';
+            answerButtonB.style.display = 'none';
+            resultDiv.style.display = 'block';
+            resultText.textContent = animalData[finalAnimal].description;
+        }
+
+        restartButton.addEventListener('click', startGame);
+
+        startGame();
+    </script>
+</body>
+</html>
